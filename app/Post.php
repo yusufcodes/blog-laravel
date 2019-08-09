@@ -35,7 +35,7 @@ class Post
 
         $posts = $session->get('posts');
         array_push($posts, ['title' => $title, 'content' => $content]);
-        $session->put('posts', $posts)
+        $session->put('posts', $posts);
     }
 
     public function editPost($session, $id, $title, $content)
