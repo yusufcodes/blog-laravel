@@ -11,9 +11,7 @@
 |
 */
 // Homepage
-Route::get('/', ['as' => 'blog.index', function () {
-    return view('blog.index');
-}]);
+Route::get('/', ['as' => 'blog.index', 'PostController@getIndex']);
 
 /* Single post
 Takes a single parameter, id, and uses this value to dynamically change the title and content of a post. */
