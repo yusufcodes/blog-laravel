@@ -11,7 +11,6 @@
 |
 */
 // Homepage
-//Route::get('/', ['as' => 'blog.index', 'PostController@getIndex']);
 Route::get('/', 'PostController@getIndex')->name('blog.index');
 
 /* Single post
