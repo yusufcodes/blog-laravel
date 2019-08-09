@@ -10,117 +10,43 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-// Homepage
-Route::get('/', 'PostController@getIndex')->name('blog.index');
+Route::get('/', [
+    'uses' => 'PostController@getIndex',
+    'as' => 'blog.index'
+]);
 
-/* Single post
-Takes a single parameter, id, and uses this value to dynamically change the title and content of a post. */
-Route::get('post/{id}', function ($id) {
-    if ($id == 1)
-    {
-        $post = 
-        [
-            'title' => 'Learning Laravel',
-            'content' => 'This blog post will get you right on track with Laravel!'
-        ];
-    }
-    else
-    {
-        $post = 
-        [
-            'title' => 'Something else',
-            'content' => 'Some other content'
-        ];
-    }
-    
-    /* The $post variable is sent back with the page to display this data onto,
-    the title and contents. The contents of $post can then be accessed in the view. */
-    return view('blog.post', ['post' => $post]);
-})->name('blog.post');
+Route::get('post/{id}', [
+    'uses' => 'PostController@getPost',
+    'as' => 'blog.post'
+]);
 
-// About
 Route::get('about', function () {
     return view('other.about');
 })->name('other.about');
 
-// Admin routes
-/* The group method is used to append the 'admin' route to all of the contained routes. This saves us from writing admin/create, admin/edit, etc. */
-Route::group(['prefix' => 'admin'], function () {
-    // Index
-    Route::get('', function () {
-        return view('admin.index');
-    })->name('admin.index');
-    
-    // Create
-    Route::get('create', function () {
-        return view('admin.create');
-    })->name('admin.create');
-    
-    /* Edit
-    Takes a single parameter, id, and uses this value to dynamically change the title and content of a post. */
-    Route::get('edit/{id}', function ($id) {
-        if ($id == 1)
-        {
-            $post = 
-            [
-                'title' => 'Learning Laravel',
-                'content' => 'This blog post will get you right on track with Laravel!'
-            ];
-        }
-        else {
-            $post = 
-            [
-                'title' => 'Something else',
-                'content' => 'Some other content'
-            ];
-        }
-        
-        return view('admin.edit', ['post' => $post]);
-    })->name('admin.edit');
-    
-    // Admin POST routes
-    /* The following two POST routes take two arguments in their constructors: 
-    1.\Illuminate\Http\Request $request
-    Allows access to the HTTP request made to the route
+Route::group(['prefix' => 'admin'], function() {
+    Route::get('', [
+        'uses' => 'PostController@getAdminIndex',
+        'as' => 'admin.index'
+    ]);
 
-    2.\Illuminate\Validation\Factory $validator
-    Facade made to handle validation */
+    Route::get('create', [
+        'uses' => 'PostController@getAdminCreate',
+        'as' => 'admin.create'
+    ]);
 
-    // Create
-    Route::post('create', function (\Illuminate\Http\Request $request,
-    \Illuminate\Validation\Factory $validator) {
-        /* Creating an instance of the Validator object, passing in all the data required from the request through the use of the all method. Associative array used to specify the rules of validation for each field. */
-        $validation = $validator->make($request->all(), [
-            'title' => 'required|min:5',
-            'content' => 'required|min:10'
-        ]);
+    Route::post('create', [
+        'uses' => 'PostController@postAdminCreate',
+        'as' => 'admin.create'
+    ]);
 
-        /* Upon a failed validation, the user is sent back to the page that they came from with the errors appended to the request, which are then able to be displayed to the user. */
-        if ($validation->fails())
-        {
-            return redirect()->back()->withErrors($validation);
-        }
+    Route::get('edit/{id}', [
+        'uses' => 'PostController@getAdminEdit',
+        'as' => 'admin.edit'
+    ]);
 
-        /* Sending the user back to the index page, showing that their update was successful using the with method to send back the data which they entered. */
-        return redirect()
-        ->route('admin.index')
-        ->with('info', 'Post created, with Title: ' . $request->input('title'));
-    })->name('admin.create');
-    
-    Route::post('edit', function (\Illuminate\Http\Request $request,
-    \Illuminate\Validation\Factory $validator) {
-        $validation = $validator->make($request->all(), [
-            'title' => 'required|min:5',
-            'content' => 'required|min:10'
-        ]);
-
-        if ($validation->fails())
-        {
-            return redirect()->back()->withErrors($validation);
-        }
-
-        return redirect()
-        ->route('admin.index')
-        ->with('info', 'Post edited, new Title: ' . $request->input('title'));
-    })->name('admin.update');
+    Route::post('edit', [
+        'uses' => 'PostController@postAdminUpdate',
+        'as' => 'admin.update'
+    ]);
 });
