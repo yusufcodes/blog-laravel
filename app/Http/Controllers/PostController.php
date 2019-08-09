@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 // Sessions
 use Illuminate\Session\Store;
 
-// use App\Http\Requests;
+use App\Http\Requests;
 
 class PostController extends Controller
 {
@@ -17,6 +17,6 @@ class PostController extends Controller
         $post = new Post();
         $posts = $post->getPosts($session);
 
-        return view('blog.index', ['posts' => $posts])
+        return view('blog.index', ['posts' => $posts]);
     }
 }

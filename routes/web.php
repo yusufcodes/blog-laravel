@@ -11,11 +11,12 @@
 |
 */
 // Homepage
-Route::get('/', ['as' => 'blog.index', 'PostController@getIndex']);
+//Route::get('/', ['as' => 'blog.index', 'PostController@getIndex']);
+Route::get('/', 'PostController@getIndex')->name('blog.index');
 
 /* Single post
 Takes a single parameter, id, and uses this value to dynamically change the title and content of a post. */
-Route::get('post/{id}', ['as' => 'blog.post', function ($id) {
+Route::get('post/{id}', function ($id) {
     if ($id == 1)
     {
         $post = 
@@ -36,29 +37,29 @@ Route::get('post/{id}', ['as' => 'blog.post', function ($id) {
     /* The $post variable is sent back with the page to display this data onto,
     the title and contents. The contents of $post can then be accessed in the view. */
     return view('blog.post', ['post' => $post]);
-}]);
+})->name('blog.post');
 
 // About
-Route::get('about', ['as' => 'other.about', function () {
+Route::get('about', function () {
     return view('other.about');
-}]);
+})->name('other.about');
 
 // Admin routes
 /* The group method is used to append the 'admin' route to all of the contained routes. This saves us from writing admin/create, admin/edit, etc. */
 Route::group(['prefix' => 'admin'], function () {
     // Index
-    Route::get('', ['as' => 'admin.index', function () {
+    Route::get('', function () {
         return view('admin.index');
-    }]);
+    })->name('admin.index');
     
     // Create
-    Route::get('create', ['as' => 'admin.create', function () {
+    Route::get('create', function () {
         return view('admin.create');
-    }]);
+    })->name('admin.create');
     
     /* Edit
     Takes a single parameter, id, and uses this value to dynamically change the title and content of a post. */
-    Route::get('edit/{id}', ['as' => 'admin.edit', function ($id) {
+    Route::get('edit/{id}', function ($id) {
         if ($id == 1)
         {
             $post = 
@@ -76,7 +77,7 @@ Route::group(['prefix' => 'admin'], function () {
         }
         
         return view('admin.edit', ['post' => $post]);
-    }]);
+    })->name('admin.edit');
     
     // Admin POST routes
     /* The following two POST routes take two arguments in their constructors: 
@@ -87,7 +88,7 @@ Route::group(['prefix' => 'admin'], function () {
     Facade made to handle validation */
 
     // Create
-    Route::post('create', ['as' => 'admin.create', function (\Illuminate\Http\Request $request,
+    Route::post('create', function (\Illuminate\Http\Request $request,
     \Illuminate\Validation\Factory $validator) {
         /* Creating an instance of the Validator object, passing in all the data required from the request through the use of the all method. Associative array used to specify the rules of validation for each field. */
         $validation = $validator->make($request->all(), [
@@ -105,9 +106,9 @@ Route::group(['prefix' => 'admin'], function () {
         return redirect()
         ->route('admin.index')
         ->with('info', 'Post created, with Title: ' . $request->input('title'));
-    }]);
+    })->name('admin.create');
     
-    Route::post('edit', ['as' => 'admin.update', function (\Illuminate\Http\Request $request,
+    Route::post('edit', function (\Illuminate\Http\Request $request,
     \Illuminate\Validation\Factory $validator) {
         $validation = $validator->make($request->all(), [
             'title' => 'required|min:5',
@@ -122,5 +123,5 @@ Route::group(['prefix' => 'admin'], function () {
         return redirect()
         ->route('admin.index')
         ->with('info', 'Post edited, new Title: ' . $request->input('title'));
-    }]);
+    })->name('admin.update');
 });

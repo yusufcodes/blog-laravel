@@ -6,7 +6,7 @@ class Post
 {
     public function getPosts($session)
     {
-        if (!session->has('posts'))
+        if (!$session->has('posts'))
         {
             $this->createDummyData($session);
         }
