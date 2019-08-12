@@ -1,8 +1,10 @@
 <?php
 
 namespace App;
+use Illuminate\Database\Eloquent\Model;
 
-class Post
+
+class Post extends Model
 {
     // Retrieve all posts
     public function getPosts($session)
