@@ -4,7 +4,6 @@ namespace App;
 
 class Post
 {
-
     // Retrieve all posts
     public function getPosts($session)
     {
