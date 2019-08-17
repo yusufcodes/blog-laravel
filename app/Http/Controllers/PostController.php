@@ -26,8 +26,7 @@ class PostController extends Controller
 
     public function getPost(Store $session, $id)
     {
-        $post = new Post();
-        $posts = $post->getPost($session, $id);
+        $post = Post::find($id);
         return view('blog.post', ['post' => $posts]);
     }
 
