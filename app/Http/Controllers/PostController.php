@@ -53,13 +53,16 @@ class PostController extends Controller
             'content' => 'required|min:10'
         ]);
 
-        $post = new Post();
-        $post->addPost(
-            $session,
-            $request->input('title'),
-            $request->input('content')
-        );
+        // Create a new instance of the Post model, and populate the title and content fields
+        // Passing in an associative array with the field names works because of the $fillable protected field defined in the model
+        $post = new Post([
+            'title' => $request->input('title');
+            'content' => $request->input('content');
+        ]);
 
+        // Eloquent method to execute queries to the database linked to the model
+        $post->save();
+        
         return redirect()
         ->route('admin.index')
         ->with('info', 'Post created, Title is: ' . $request->input('title'));
