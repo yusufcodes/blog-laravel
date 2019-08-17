@@ -47,7 +47,6 @@ class Post extends Model
         $posts[$id] = ['title' => $title, 'content' => $content];
         $session->put('posts', $posts);
     }
-
     private function createDummyData($session)
     {
         $posts = [
