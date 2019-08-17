@@ -17,7 +17,7 @@
             <h1 class="post-title">{{ $post->title }}</h1>
             <p>{{ $post->content }}</p>
         <p><a href="{{
-        route('blog.post', ['id' => $post->id }}">Read more...</a></p>
+        route('blog.post', ['id' => $post->id]) }}">Read more...</a></p>
         </div>
     </div>
     <hr>

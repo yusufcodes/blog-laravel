@@ -20,8 +20,7 @@ class PostController extends Controller
 
     public function getAdminIndex(Store $session)
     {
-        $post = new Post();
-        $posts = $post->getPosts($session);
+        $posts = Post::all();
         return view('admin.index', ['posts' => $posts]);
     }
 
@@ -55,8 +54,8 @@ class PostController extends Controller
         // Create a new instance of the Post model, and populate the title and content fields
         // Passing in an associative array with the field names works because of the $fillable protected field defined in the model
         $post = new Post([
-            'title' => $request->input('title');
-            'content' => $request->input('content');
+            'title' => $request->input('title'),
+            'content' => $request->input('content')
         ]);
 
         // Eloquent method to execute queries to the database linked to the model
