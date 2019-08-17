@@ -12,22 +12,22 @@ use App\Http\Requests;
 
 class PostController extends Controller
 {
-    public function getIndex(Store $session)
+    public function getIndex()
     {
         $posts = Post::all();
         return view('blog.index', ['posts' => $posts]);
     }
 
-    public function getAdminIndex(Store $session)
+    public function getAdminIndex()
     {
         $posts = Post::all();
         return view('admin.index', ['posts' => $posts]);
     }
 
-    public function getPost(Store $session, $id)
+    public function getPost($id)
     {
         $post = Post::find($id);
-        return view('blog.post', ['post' => $posts]);
+        return view('blog.post', ['post' => $post]);
     }
 
     public function getAdminCreate()
@@ -35,12 +35,10 @@ class PostController extends Controller
         return view('admin.create');
     }
 
-    public function getAdminEdit(Store $session, $id)
+    public function getAdminEdit($id)
     {
-        $post = new Post();
-        /*!!!*/
-        $posts = $post->getPost($session, $id);
-        return view('admin.edit', ['post' => $posts, 'postId' => $id]);
+        $post = Post::find($id);
+        return view('admin.edit', ['post' => $post, 'postId' => $id]);
     }
 
     public function postAdminCreate(Store $session, Request $request)
@@ -72,13 +70,18 @@ class PostController extends Controller
             'content' => 'required|min:10'
         ]);
 
-        $post = new Post();
-        $post->editPost(
-            $session,
-            $request->input('id'),
-            $request->input('title'),
-            $request->input('content')
-        );
+        // $post = new Post();
+        // $post->editPost(
+        //     $session,
+        //     $request->input('id'),
+        //     $request->input('title'),
+        //     $request->input('content')
+        // );
+
+        $post = Post::find($request->input('id'));
+        $post->title = $request->input('title');
+        $post->content = $request->input('content');
+        $post->save();
         
         return redirect()
         ->route('admin.index')
