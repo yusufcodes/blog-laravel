@@ -70,14 +70,6 @@ class PostController extends Controller
             'content' => 'required|min:10'
         ]);
 
-        // $post = new Post();
-        // $post->editPost(
-        //     $session,
-        //     $request->input('id'),
-        //     $request->input('title'),
-        //     $request->input('content')
-        // );
-
         $post = Post::find($request->input('id'));
         $post->title = $request->input('title');
         $post->content = $request->input('content');
