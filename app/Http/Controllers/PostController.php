@@ -41,7 +41,7 @@ class PostController extends Controller
         return view('admin.edit', ['post' => $post, 'postId' => $id]);
     }
 
-    public function postAdminCreate(Store $session, Request $request)
+    public function postAdminCreate(Request $request)
     {
         $this->validate($request, [
             'title' => 'required|min:5',
@@ -63,7 +63,7 @@ class PostController extends Controller
         ->with('info', 'Post created, Title is: ' . $request->input('title'));
     }
 
-    public function postAdminUpdate(Store $session, Request $request)
+    public function postAdminUpdate(Request $request)
     {
         $this->validate($request, [
             'title' => 'required|min:5',
