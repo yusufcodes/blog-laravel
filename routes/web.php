@@ -20,6 +20,11 @@ Route::get('post/{id}', [
     'as' => 'blog.post'
 ]);
 
+Route::get('post/like/{id}', [
+    'uses' => 'PostController@getLikePost',
+    'as' => 'blog.post.like'
+]);
+
 Route::get('about', function () {
     return view('other.about');
 })->name('other.about');
