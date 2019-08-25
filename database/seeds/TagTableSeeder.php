@@ -11,6 +11,12 @@ class TagTableSeeder extends Seeder
      */
     public function run()
     {
-        //
+        $tag = new \App\Tag();
+        $tag->name = "Tutorials";
+        $tag->save();
+
+        $tag = new \App\Tag();
+        $tag->name = "Other";
+        $tag->save();
     }
 }
