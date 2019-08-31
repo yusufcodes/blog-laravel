@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Like;
 use App\Post;
+use App\Tag;
 use Illuminate\Http\Request;
 
 // Sessions
@@ -42,13 +43,15 @@ class PostController extends Controller
 
     public function getAdminCreate()
     {
-        return view('admin.create');
+        $tags = Tag::all();
+        return view('admin.create', ['tags' => $tags]);
     }
 
     public function getAdminEdit($id)
     {
         $post = Post::find($id);
-        return view('admin.edit', ['post' => $post, 'postId' => $id]);
+        $tags = Tag::all();
+        return view('admin.edit', ['post' => $post, 'postId' => $id, 'tags' => $tags]);
     }
 
     public function postAdminCreate(Request $request)
@@ -67,6 +70,9 @@ class PostController extends Controller
 
         // Eloquent method to execute queries to the database linked to the model
         $post->save();
+
+        // Associating any tags selected by the user to the new post being created
+        $post->tags()->attach($request->input('tags') === null ? [] : $request->input('tags'));
         
         return redirect()
         ->route('admin.index')
@@ -84,7 +90,12 @@ class PostController extends Controller
         $post->title = $request->input('title');
         $post->content = $request->input('content');
         $post->save();
-        
+        // $post->tags()->detach();
+        // $post->tags()->attach($request->input('tags') === null ? [] : $request->input('tags'));
+
+        // Sync will update the tags according to the tags passed in, removing any old ones, and adding new ones
+        $post->tags()->sync($request->input('tags') === null ? [] : $request->input('tags'));
+
         return redirect()
         ->route('admin.index')
         ->with('info', 'Post edited, Title is: ' . $request->input('title'));
@@ -94,6 +105,7 @@ class PostController extends Controller
     {
         $post = Post::find($id);
         $post->likes()->delete();
+        $post->tags()->detach();
         $post->delete();
 
         return redirect()

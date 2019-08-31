@@ -16,6 +16,12 @@
         <div class="col-md-12 text-center">
             <h1 class="post-title">{{ $post->title }}</h1>
             <p>{{ $post->content }}</p>
+        <p>
+            @foreach ($post->tags as $tag)
+                {{ $tag->name }}
+            @endforeach
+        </p>
+
         <p><a href="{{
         route('blog.post', ['id' => $post->id]) }}">Read more...</a></p>
         </div>
