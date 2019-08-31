@@ -21,4 +21,10 @@ class Post extends Model
         return $this->belongsToMany('App\Tag')->withTimestamps();
     }
 
+    // Mutator to convert all post titles to lowercase
+    public function setTitleAttribute($value)
+    {
+        $this->attributes['title'] = strtolower($value);
+    }
+
 }
