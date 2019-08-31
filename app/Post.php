@@ -27,4 +27,10 @@ class Post extends Model
         $this->attributes['title'] = strtolower($value);
     }
 
+    // Accessor to transform any title of a post to uppercase
+    public function getTitleAttribute($value)
+    {
+        return strtoupper($value);
+    }
+
 }
